@@ -14,8 +14,6 @@ void dp_with_binary_search(const vector<int> &arr) {
     dp.push_back(arr[0]);
     index.push_back(0);
 
-    int lis = 1, end_index = -1;
-
     for (int i = 1; i < n; ++i) {
         int j = int(lower_bound(begin(dp), end(dp), arr[i]) - begin(dp));
         if (j == (int) dp.size()) {
@@ -30,28 +28,23 @@ void dp_with_binary_search(const vector<int> &arr) {
                 trace[i] = index[j - 1];
             }
         }
-
-        if (lis < j + 1) {
-            lis = j + 1;
-            end_index = i;
-        }
     }
-
     vector<int> ans;
+    int end_index = index.back();
     while (end_index != -1) {
         ans.push_back(arr[end_index]);
         end_index = trace[end_index];
     }
 
-    assert(lis == (int) ans.size());
+    assert(ans.size() == dp.size());
     reverse(begin(ans), end(ans));
 
-    cout << lis << '\n';
-    // for (int i = 0; i < lis; ++i) {
-    //     if (i > 0) cout << ' ';
-    //     cout << ans[i];
-    // }
-    // cout << '\n';
+    cout << ans.size() << '\n';
+    for (int i = 0; i < (int) ans.size(); ++i) {
+        if (i > 0) cout << ' ';
+        cout << ans[i];
+    }
+    cout << '\n';
 }
 
 int main() {

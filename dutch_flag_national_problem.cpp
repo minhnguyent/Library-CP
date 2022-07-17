@@ -6,7 +6,7 @@
 using namespace std;
 
 void fun(vector<int> &arr) {
-    // move all element less than pivot to the left of the array
+    // move all elements less than pivot to the left of the array
     // E.g. [1, 0, 0, 1, 1], pivot = 1 -> [0, 0, 1, 1, 1]
     int pivot = 1;
     int sz = arr.size();
@@ -19,8 +19,8 @@ void fun(vector<int> &arr) {
     }
 }  
 void funfun(vector<int> &arr) {
-    // move all element less than pivot to the left of the array
-    // move all element greater than pivot to the right of the array
+    // move all elements less than pivot to the left of the array
+    // move all elements greater than pivot to the right of the array
     // E.g. [1, 2, 0, 0, 2, 2, 1], pivot = 1 -> [0, 0, 1, 1, 2, 2, 2]
     int sz = arr.size();
     int i = 0, j = 0, k = sz - 1;
