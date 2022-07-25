@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <cassert>
+#include <array>
 
 using namespace std;
 
@@ -11,49 +12,49 @@ template<typename T, typename G> bool chmin(T &a, const G &b) { return (a > b ? 
 
 void LCIS(const vector<int> &A, const vector<int> &B) {
     int n = (int) A.size(), m = (int) B.size();
-    vector<int> dp(m), trace(m, -1);
+    vector<array<int, 3>> c;
     for (int i = 0; i < n; ++i) {
-        int curr_length = 0;
-        int prev_index = -1;
         for (int j = 0; j < m; ++j) {
             if (A[i] == B[j]) {
-                if (chmax(dp[j], curr_length + 1)) {
-                    // dp[j] = max(dp[j], curr_length + 1);
-                    trace[j] = prev_index;
-                }
-            }
-            else if (A[i] > B[j]) {
-                if (chmax(curr_length, dp[j])) {
-                    // curr_length = max(curr_length, dp[j]);
-                    prev_index = j;
-                }
+                c.push_back({i, j, A[i]});
             }
         }
     }
-    int length_of_lcis = 0;
+
+    sort(begin(c), end(c));
+    // Now, finding LIS on C 
+    int sz = (int) c.size();
+    vector<int> dp(sz, 1), trace(sz, - 1);
+    int lis = 0; 
     int index = -1;
-    for (int i = 0; i < m; ++i) {
-        if (chmax(length_of_lcis, dp[i])) {
+    for (int i = 0; i < sz; ++i) {
+        for (int j = 0; j < i; ++j) {
+            if (c[j][1] < c[i][1] && c[j][2] < c[i][2]) {
+                if (chmax(dp[i], 1 + dp[j])) {
+                    trace[i] = j;
+                }
+            }
+        }
+        if (chmax(lis, dp[i])) {
             index = i;
         }
     }
-    cout << length_of_lcis << '\n';
-    if (length_of_lcis) {
+    cout << lis << '\n';
+    if (lis) {
         vector<int> ans;
         while (index != -1) {
-            ans.push_back(B[index]);
+            ans.push_back(c[index][2]);
             index = trace[index];
         }
+        assert(lis == (int) ans.size());
         reverse(begin(ans), end(ans));
-        assert(length_of_lcis == (int) ans.size());
-        for (int i = 0; i < length_of_lcis; ++i) {
-            cout << ans[i] << ' ';
+        for (int i = 0; i < lis; ++i) {
+            if (i > 0) cout << ' ';
+            cout << ans[i];
         }
-        cout << '\n';
     }
 
     // Time complexity: O(N * M)
-
 }
 int main() {
     ios::sync_with_stdio(false); cin.tie(nullptr);
